@@ -1,0 +1,33 @@
+plugins {
+    id "java"
+    id "eclipse"
+    id "idea"
+    id "jaci.openrio.gradle.GradleRIO" version "2017.0.1"
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+frc {
+    robotClass = 'org.usfirst.frc.team1374.robot.Robot'
+    //rioHost = "robot-RIO-4.local"
+    team = '4'
+    rioIP = "10.13.34.20"
+}
+
+def robotManifest = {
+    attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Robot-Class': frc.robotClass
+}
+
+dependencies {
+    compile wpilib()
+    compile talonSrx()
+	compile fileTree(dir: "libs", include: "*.jar")
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
+}
